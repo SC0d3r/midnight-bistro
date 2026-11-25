@@ -95,7 +95,7 @@ export function stageShot(game, kind, seed = 7) {
       game.chop.speed = 1.0;
       o0.chops = 2;
     }
-    game.camera = createCamera(390, 430, 2.35);
+    game.camera = createCamera(400, 446, 2.75);
     game.tips = 128;
     game.combo = 3;
     game.clockMinutes = 167;
@@ -119,7 +119,7 @@ export function stageShot(game, kind, seed = 7) {
       game.cook.speed = 0.11;
       o0.quality = null;
     }
-    game.camera = createCamera(636, 420, 2.25);
+    game.camera = createCamera(646, 436, 2.7);
     emitSteam(game, 674, 402, 12, 12, { a: 0.2 });
     emitSteam(game, 578, 424, 6, 16, { a: 0.12 });
     emitSpark(game, 566, 440, 8);
@@ -132,7 +132,7 @@ export function stageShot(game, kind, seed = 7) {
     ticket(game, 1, 'margherita', 'chop', 0.55, { gathered: true, chops: 1 });
     moveChefTo(game.chef, 'pass', 0);
     setPose(game.chef, 'ring', 99);
-    game.camera = createCamera(1280, 470, 2.1);
+    game.camera = createCamera(1210, 480, 2.35);
     game.tips = 128;
     game.combo = 3;
     game.tipsEarned = 114;

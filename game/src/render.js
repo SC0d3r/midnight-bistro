@@ -1274,15 +1274,23 @@ function drawPassTop(ctx, game) {
     ctx.ellipse(1104, 500, 100, 40, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-    drawDish(ctx, 1104, 500, recipeById('ramen'), 1.85, true);
+    drawDish(ctx, 1104, 500, recipeById('ramen'), 2.15, true);
     // a bright rim keeps the plate from melting into the counter
     ctx.save();
     ctx.strokeStyle = withAlpha('#fff4d6', 0.85);
     ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.ellipse(1104, 498, 47, 15.2, 0, Math.PI * 1.03, Math.PI * 1.97);
+    ctx.ellipse(1104, 498, 54, 17.4, 0, Math.PI * 1.03, Math.PI * 1.97);
     ctx.stroke();
     ctx.restore();
+    // the pass light box says what the counter already knows
+    ctx.fillStyle = withAlpha('#1a1114', 0.88);
+    rr(ctx, 1104 - 52, 442, 104, 25, 5);
+    ctx.fill();
+    ctx.strokeStyle = withAlpha('#f3bf6d', 0.65);
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    text(ctx, 'ORDER UP', 1104, 460, 12.5, '#ffd79a', { weight: 700, spacing: 1.7, align: 'center' });
     // steam curls rising into the lamp light, so the pass reads as a pass
     ctx.save();
     ctx.strokeStyle = withAlpha('#ffe6bd', 0.26);
