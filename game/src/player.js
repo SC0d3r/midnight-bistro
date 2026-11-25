@@ -254,15 +254,15 @@ export function drawChef(ctx, game) {
       { x: 8, y: -28 },
     ];
   } else if (pose === 'garnish') {
-    // one hand steadies the board, the other pinches basil over the pizza
+    // one hand steadies the board, the other pinches basil above the pizza
     const bob = Math.sin(c.poseT * 2.6) * 1.6;
     hands = [
       { x: -36, y: 2 },
-      { x: 6, y: 6 + bob },
+      { x: 8, y: -3 + bob },
     ];
     elbows = [
       { x: -38, y: -26 },
-      { x: 20, y: -24 },
+      { x: 20, y: -26 },
     ];
   } else if (pose === 'stir') {
     hands = [
@@ -326,7 +326,7 @@ export function drawChef(ctx, game) {
   if (pose === 'chop') {
     drawKnife(ctx, hands[1].x + 2, hands[1].y + 2, -0.55, 1.4);
   } else if (pose === 'garnish') {
-    // a whole basil sprig held between the fingers, leaves dropping to the pizza
+    // a whole basil sprig held up between the fingers, loose leaves dropping to the pizza
     const hx = hands[1].x;
     const hy = hands[1].y;
     ctx.save();
@@ -334,13 +334,13 @@ export function drawChef(ctx, game) {
     ctx.strokeStyle = '#4a7534';
     ctx.lineWidth = 1.7;
     ctx.beginPath();
-    ctx.moveTo(-1, -1);
-    ctx.lineTo(2, 9);
+    ctx.moveTo(1, 4);
+    ctx.lineTo(2, -12);
     ctx.stroke();
     const sprig = [
-      [-4.2, 1.4, -0.55, 1.0],
-      [5.0, 2.4, 0.7, 1.05],
-      [0.4, 7.6, 0.05, 0.9],
+      [-3.6, -5.6, -0.75, 1.0],
+      [6.2, -7.2, 0.6, 1.05],
+      [1.4, -13.2, -0.1, 0.92],
     ];
     for (const [dx, dy, rot, s] of sprig) {
       ctx.save();
@@ -348,18 +348,30 @@ export function drawChef(ctx, game) {
       ctx.rotate(rot);
       ctx.fillStyle = '#7dbf57';
       ctx.beginPath();
-      ctx.ellipse(0, 0, 5.4 * s, 2.7 * s, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, 5.6 * s, 2.8 * s, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.strokeStyle = '#3f6b2d';
       ctx.lineWidth = 0.8;
       ctx.stroke();
       ctx.restore();
     }
+    // the hand and fingers closing over the stem, so it reads as held
+    circle(ctx, 0, 1, 5.4, SKIN);
+    ctx.strokeStyle = '#cf9a6a';
+    ctx.lineWidth = 1.5;
+    ctx.beginPath();
+    ctx.moveTo(-2.6, 1.5);
+    ctx.lineTo(-1.6, 6.4);
+    ctx.moveTo(0.4, 1.5);
+    ctx.lineTo(0.8, 6.8);
+    ctx.moveTo(3.2, 1.2);
+    ctx.lineTo(3.4, 5.6);
+    ctx.stroke();
     ctx.restore();
     // the loose leaves dropping toward the pizza
     for (let i = 0; i < 4; i++) {
-      const fx = hx + 1 + i * 4.4 + Math.sin(game.time * 2 + i) * 1.5;
-      const fy = hy + 16 + i * 6;
+      const fx = hx + 1 + i * 4.2 + Math.sin(game.time * 2 + i) * 1.5;
+      const fy = hy + 10 + i * 5.5;
       ctx.save();
       ctx.translate(fx, fy);
       ctx.rotate(0.55 - i * 0.42);
