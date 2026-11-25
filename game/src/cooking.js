@@ -338,8 +338,8 @@ export function serveSlot(game, slot) {
   return tip;
 }
 
-export function addPopup(game, text, x, y, color = PAL.gold) {
-  game.popups.push({ text, x, y, color, t: 2.2, max: 2.2, vy: -18 });
+export function addPopup(game, text, x, y, color = PAL.gold, opts = {}) {
+  game.popups.push({ text, x, y, color, t: 2.2, max: 2.2, vy: -18, ...opts });
   if (game.popups.length > 10) game.popups.shift();
 }
 

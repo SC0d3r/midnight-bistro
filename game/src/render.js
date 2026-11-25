@@ -1071,49 +1071,57 @@ function drawPizza(ctx, x, y, r, game) {
   // a few basil bits waiting beside it
   drawIngredient(ctx, 'basil', x + r * 0.9, y - r * 0.5, 6);
   drawIngredient(ctx, 'basil', x - r * 0.85, y - r * 0.45, 5);
-  // the cover catches the pizza half-built: one quarter is sauce waiting for cheese, a slice is on its way down
+  // the cover catches the pizza half-built: the lower-right quarter is sauce only, and the ladle is still over it
   if (game.shot === 'cover') {
-    // one quarter is still bare dough: the sauce has not been spread there yet
     ctx.save();
     ctx.beginPath();
     ctx.moveTo(x, y);
-    ctx.ellipse(x, y, r * 0.78, r * 0.7, 0, Math.PI * 1.46, Math.PI * 1.96);
+    ctx.ellipse(x, y, r * 0.78, r * 0.7, 0, 0, Math.PI * 0.5);
     ctx.closePath();
     ctx.clip();
-    const raw = ctx.createRadialGradient(x + r * 0.1, y - r * 0.3, 2, x, y, r);
-    raw.addColorStop(0, '#f2d6a0');
-    raw.addColorStop(0.7, '#e6c184');
-    raw.addColorStop(1, '#d8ae70');
+    const raw = ctx.createRadialGradient(x + r * 0.1, y + r * 0.1, 2, x, y, r);
+    raw.addColorStop(0, '#dd6a4f');
+    raw.addColorStop(1, '#b8432e');
     ctx.fillStyle = raw;
     ctx.fillRect(x - r, y - r, r * 2, r * 2);
-    // flour dust on the bare dough
-    ctx.fillStyle = withAlpha('#fff6e0', 0.5);
-    for (let i = 0; i < 7; i++) {
-      const a = -1.35 + i * 0.14;
-      circle(ctx, x + Math.cos(a) * r * (0.3 + (i % 3) * 0.12), y + Math.sin(a) * r * (0.26 + (i % 2) * 0.1), 0.9, withAlpha('#fff6e0', 0.45));
-    }
     ctx.restore();
-    // a cheese torn and a basil leaf dropping onto the bare quarter
-    const drops = [
-      [x + r * 0.3, y - r * 0.3, '#fbf5e6', 0.15, -1.15],
-      [x + r * 0.47, y - r * 0.08, '#5f9945', 0.11, -0.7],
-    ];
-    for (const [tx, ty, col, rad, rot] of drops) {
-      ctx.save();
-      ctx.strokeStyle = withAlpha('#f6e8cb', 0.55);
-      ctx.lineWidth = 1.3;
-      ctx.beginPath();
-      ctx.moveTo(tx, ty - r * 0.34);
-      ctx.lineTo(tx - 1, ty - r * 0.16);
-      ctx.stroke();
-      ctx.translate(tx, ty);
-      ctx.rotate(rot);
-      ctx.fillStyle = col;
-      ctx.beginPath();
-      ctx.ellipse(0, 0, r * rad, r * rad * 0.72, 0, 0, Math.PI * 2);
-      ctx.fill();
-      ctx.restore();
-    }
+    // the ladle, still pouring the last of the sauce into the bare quarter
+    ctx.save();
+    ctx.translate(x + r * 0.5, y + r * 0.02);
+    ctx.rotate(0.5);
+    ctx.strokeStyle = '#7d532f';
+    ctx.lineWidth = 4.2;
+    ctx.lineCap = 'round';
+    ctx.beginPath();
+    ctx.moveTo(r * 0.62, -r * 0.58);
+    ctx.lineTo(r * 0.14, -r * 0.08);
+    ctx.stroke();
+    ctx.strokeStyle = withAlpha('#c99a63', 0.75);
+    ctx.lineWidth = 1.4;
+    ctx.beginPath();
+    ctx.moveTo(r * 0.6, -r * 0.56);
+    ctx.lineTo(r * 0.16, -r * 0.1);
+    ctx.stroke();
+    ctx.fillStyle = '#9aa3ab';
+    ctx.beginPath();
+    ctx.ellipse(0, 0, r * 0.24, r * 0.13, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#c4ccd2';
+    ctx.beginPath();
+    ctx.ellipse(-r * 0.02, -r * 0.02, r * 0.2, r * 0.1, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#c9523a';
+    ctx.beginPath();
+    ctx.ellipse(-r * 0.02, -r * 0.01, r * 0.15, r * 0.07, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = '#cf5a3f';
+    ctx.beginPath();
+    ctx.moveTo(-r * 0.1, r * 0.05);
+    ctx.quadraticCurveTo(-r * 0.16, r * 0.3, -r * 0.06, r * 0.42);
+    ctx.quadraticCurveTo(-r * 0.02, r * 0.28, -r * 0.02, r * 0.06);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
   }
   ctx.restore();
 }
@@ -2049,10 +2057,14 @@ function drawPopups(ctx, game) {
     const a = Math.min(1, p.t / 0.5);
     ctx.save();
     ctx.globalAlpha = a;
-    ctx.fillStyle = withAlpha('#1a1114', 0.35);
-    rr(ctx, p.x - 44, p.y - 18, 88, 25, 8);
+    const size = p.size || 17;
+    ctx.font = `700 ${size}px ${FONT.ui}`;
+    const tw = ctx.measureText(p.text).width;
+    const bw = tw + size * 1.5;
+    ctx.fillStyle = withAlpha('#1a1114', 0.5);
+    rr(ctx, p.x - bw / 2, p.y - size - 3, bw, size + 21, 8);
     ctx.fill();
-    text(ctx, p.text, p.x, p.y, 17, p.color, { weight: 700, align: 'center', font: 'ui' });
+    text(ctx, p.text, p.x, p.y, size, p.color, { weight: 700, align: 'center', font: 'ui' });
     ctx.restore();
   }
 }

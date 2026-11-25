@@ -98,7 +98,7 @@ export function stageShot(game, kind, seed = 7) {
     game.camera = createCamera(400, 446, 2.75);
     game.tips = 128;
     game.combo = 3;
-    game.clockMinutes = 185;
+    game.clockMinutes = 172;
     emitFlour(game, 386, 486, 26);
     emitBits(game, 392, 486, '#6ea84f', 7);
     emitSteam(game, 674, 404, 4, 10, { a: 0.13 });
@@ -120,7 +120,7 @@ export function stageShot(game, kind, seed = 7) {
       o0.quality = null;
     }
     game.camera = createCamera(646, 436, 2.7);
-    game.clockMinutes = 176;
+    game.clockMinutes = 178;
     emitSteam(game, 674, 402, 12, 12, { a: 0.2 });
     emitSteam(game, 578, 424, 6, 16, { a: 0.12 });
     emitSpark(game, 566, 440, 8);
@@ -138,9 +138,9 @@ export function stageShot(game, kind, seed = 7) {
     game.combo = 3;
     game.tipsEarned = 114;
     game.served = 3;
-    game.clockMinutes = 151;
+    game.clockMinutes = 184;
     game.lastTip = { amount: 18, mult: 3, t: 2.1, slot: 2 };
-    addPopup(game, '+$18 x3', 1104, 424, '#ffd79a');
+    addPopup(game, '+$18 x3', 1104, 446, '#ffd79a', { size: 24 });
     emitHearts(game, 1104, 566, 7);
     emitCoins(game, 1104, 596, 1104, 54, 4);
     emitSteam(game, 1058, 452, 8, 14, { a: 0.16 });
