@@ -98,7 +98,7 @@ export function stageShot(game, kind, seed = 7) {
     game.camera = createCamera(400, 446, 2.75);
     game.tips = 128;
     game.combo = 3;
-    game.clockMinutes = 167;
+    game.clockMinutes = 185;
     emitFlour(game, 386, 486, 26);
     emitBits(game, 392, 486, '#6ea84f', 7);
     emitSteam(game, 674, 404, 4, 10, { a: 0.13 });
@@ -120,6 +120,7 @@ export function stageShot(game, kind, seed = 7) {
       o0.quality = null;
     }
     game.camera = createCamera(646, 436, 2.7);
+    game.clockMinutes = 176;
     emitSteam(game, 674, 402, 12, 12, { a: 0.2 });
     emitSteam(game, 578, 424, 6, 16, { a: 0.12 });
     emitSpark(game, 566, 440, 8);
@@ -130,15 +131,16 @@ export function stageShot(game, kind, seed = 7) {
     seat(game, 2, seat2, 'Mmm. Perfect.', 'happy');
     ticket(game, 0, 'ramen', 'serve', 0.72, { gathered: true, chops: 3 });
     ticket(game, 1, 'margherita', 'chop', 0.55, { gathered: true, chops: 1 });
-    moveChefTo(game.chef, 'pass', 0);
+    moveChefTo(game.chef, 'pass', -110);
     setPose(game.chef, 'ring', 99);
-    game.camera = createCamera(1008, 430, 2.1);
+    game.camera = createCamera(1080, 470, 2.4);
     game.tips = 128;
     game.combo = 3;
     game.tipsEarned = 114;
     game.served = 3;
+    game.clockMinutes = 151;
     game.lastTip = { amount: 18, mult: 3, t: 2.1, slot: 2 };
-    addPopup(game, '+$18 x3', 1104, 470, '#ffd79a');
+    addPopup(game, '+$18 x3', 1104, 424, '#ffd79a');
     emitHearts(game, 1104, 566, 7);
     emitCoins(game, 1104, 596, 1104, 54, 4);
     emitSteam(game, 1058, 452, 8, 14, { a: 0.16 });
@@ -161,7 +163,7 @@ export function stageShot(game, kind, seed = 7) {
       game.chop.pos = 0.47;
       o0.chops = 2;
     }
-    game.camera = createCamera(700, 420, 1.35);
+    game.camera = createCamera(760, 420, 1.35);
     game.tips = 128;
     game.combo = 3;
     game.shiftTime = 96;
@@ -170,7 +172,9 @@ export function stageShot(game, kind, seed = 7) {
     game.hintText = 'ORDER #01  ·  finish the basil, then cook the Margherita';
     game.hintT = 99;
     emitSteam(game, 674, 400, 14, 12, { a: 0.2 });
-    emitSteam(game, 1058, 448, 6, 12, { a: 0.14 });
+    // a real column off the plated ramen, so the pass reads as hot food waiting
+    emitSteam(game, 1100, 470, 11, 15, { a: 0.22 });
+    emitSteam(game, 1118, 478, 7, 11, { a: 0.16 });
     emitSpark(game, 566, 440, 7);
     emitFlour(game, 384, 486, 16);
     emitBits(game, 400, 486, '#6ea84f', 5);

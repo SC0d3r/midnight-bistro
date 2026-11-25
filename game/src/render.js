@@ -1071,6 +1071,50 @@ function drawPizza(ctx, x, y, r, game) {
   // a few basil bits waiting beside it
   drawIngredient(ctx, 'basil', x + r * 0.9, y - r * 0.5, 6);
   drawIngredient(ctx, 'basil', x - r * 0.85, y - r * 0.45, 5);
+  // the cover catches the pizza half-built: one quarter is sauce waiting for cheese, a slice is on its way down
+  if (game.shot === 'cover') {
+    // one quarter is still bare dough: the sauce has not been spread there yet
+    ctx.save();
+    ctx.beginPath();
+    ctx.moveTo(x, y);
+    ctx.ellipse(x, y, r * 0.78, r * 0.7, 0, Math.PI * 1.46, Math.PI * 1.96);
+    ctx.closePath();
+    ctx.clip();
+    const raw = ctx.createRadialGradient(x + r * 0.1, y - r * 0.3, 2, x, y, r);
+    raw.addColorStop(0, '#f2d6a0');
+    raw.addColorStop(0.7, '#e6c184');
+    raw.addColorStop(1, '#d8ae70');
+    ctx.fillStyle = raw;
+    ctx.fillRect(x - r, y - r, r * 2, r * 2);
+    // flour dust on the bare dough
+    ctx.fillStyle = withAlpha('#fff6e0', 0.5);
+    for (let i = 0; i < 7; i++) {
+      const a = -1.35 + i * 0.14;
+      circle(ctx, x + Math.cos(a) * r * (0.3 + (i % 3) * 0.12), y + Math.sin(a) * r * (0.26 + (i % 2) * 0.1), 0.9, withAlpha('#fff6e0', 0.45));
+    }
+    ctx.restore();
+    // a cheese torn and a basil leaf dropping onto the bare quarter
+    const drops = [
+      [x + r * 0.3, y - r * 0.3, '#fbf5e6', 0.15, -1.15],
+      [x + r * 0.47, y - r * 0.08, '#5f9945', 0.11, -0.7],
+    ];
+    for (const [tx, ty, col, rad, rot] of drops) {
+      ctx.save();
+      ctx.strokeStyle = withAlpha('#f6e8cb', 0.55);
+      ctx.lineWidth = 1.3;
+      ctx.beginPath();
+      ctx.moveTo(tx, ty - r * 0.34);
+      ctx.lineTo(tx - 1, ty - r * 0.16);
+      ctx.stroke();
+      ctx.translate(tx, ty);
+      ctx.rotate(rot);
+      ctx.fillStyle = col;
+      ctx.beginPath();
+      ctx.ellipse(0, 0, r * rad, r * rad * 0.72, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+  }
   ctx.restore();
 }
 
@@ -1279,36 +1323,38 @@ function drawPassTop(ctx, game) {
     // one dish waiting (or the decorative hero when the pass is clear): it fills the middle lamp
     const hero = plated.length === 1 ? plated[0] : null;
     const heroRecipe = hero ? hero.recipe : recipeById('ramen');
-    drawDish(ctx, 1104, 500, heroRecipe, hero ? 2.05 : 2.35, hero ? hero.quality === 'perfect' : true);
+    drawDish(ctx, 1104, 500, heroRecipe, hero ? 2.5 : 3.0, hero ? hero.quality === 'perfect' : true);
     // a bright rim keeps the plate from melting into the counter
     ctx.save();
-    ctx.strokeStyle = withAlpha('#fff4d6', 0.85);
-    ctx.lineWidth = 2;
+    ctx.strokeStyle = withAlpha('#fff4d6', 0.9);
+    ctx.lineWidth = 2.4;
     ctx.beginPath();
-    ctx.ellipse(1104, 498, 54, 17.4, 0, Math.PI * 1.03, Math.PI * 1.97);
+    ctx.ellipse(1104, 498, 70, 22, 0, Math.PI * 1.03, Math.PI * 1.97);
     ctx.stroke();
     ctx.restore();
-    // the pass light box says what the counter already knows
-    ctx.fillStyle = withAlpha('#1a1114', 0.88);
-    rr(ctx, 1104 - 58, 439, 116, 28, 5);
-    ctx.fill();
-    ctx.strokeStyle = withAlpha('#f3bf6d', 0.7);
-    ctx.lineWidth = 1.3;
-    ctx.stroke();
-    text(ctx, 'ORDER UP', 1104, 460, 14.5, '#ffd79a', { weight: 700, spacing: 1.7, align: 'center' });
-    // steam curls rising into the lamp light, so the pass reads as a pass
+    // short wisps rising off the bowl into the lamp light
     ctx.save();
-    ctx.strokeStyle = withAlpha('#ffe6bd', 0.26);
+    ctx.strokeStyle = withAlpha('#ffe6bd', 0.3);
     ctx.lineWidth = 2;
     for (let i = 0; i < 3; i++) {
-      const sx = 1086 + i * 16;
+      const sx = 1084 + i * 18;
       const t = game.time * 0.9 + i * 1.7;
       ctx.beginPath();
-      ctx.moveTo(sx, 488);
-      ctx.bezierCurveTo(sx - 5, 476, sx + 5 + Math.sin(t) * 2, 464, sx - 2, 451);
+      ctx.moveTo(sx, 470);
+      ctx.bezierCurveTo(sx - 5, 462, sx + 5 + Math.sin(t) * 2, 454, sx - 2, 447);
       ctx.stroke();
     }
     ctx.restore();
+    // the pass light box hangs on the wall above the bowl, clear of the chef
+    if (!hero) {
+    ctx.fillStyle = withAlpha('#1a1114', 0.92);
+    rr(ctx, 1104 - 68, 409, 136, 30, 5);
+    ctx.fill();
+    ctx.strokeStyle = withAlpha('#f3bf6d', 0.75);
+    ctx.lineWidth = 1.4;
+    ctx.stroke();
+    text(ctx, 'ORDER UP', 1104, 431, 17, '#ffd79a', { weight: 700, spacing: 1.7, align: 'center' });
+    }
   } else {
     const first = 1114 - ((plated.length - 1) * 64) / 2;
     plated.forEach((o, i) => {
@@ -1324,7 +1370,7 @@ function drawPassTop(ctx, game) {
     text(ctx, 'ORDER UP', 1114, 464, 13, '#ffd79a', { weight: 700, spacing: 1.6, align: 'center' });
   }
   // brass bell
-  drawBell(ctx, 1150, 502, game);
+  drawBell(ctx, 1205, 502, game);
   // clean plate at the end
   ctx.fillStyle = '#f7efdb';
   ctx.beginPath();
@@ -1454,20 +1500,73 @@ function drawDish(ctx, x, y, recipe, scale = 1, sparkle = false) {
   ctx.beginPath();
   ctx.ellipse(x, y, r, r * 0.32, 0, 0, Math.PI * 2);
   ctx.fill();
+  // a band of the dish's colour just inside the rim: every plate reads as its own dish
+  ctx.strokeStyle = withAlpha(recipe.color, 0.55);
+  ctx.lineWidth = 2.2 * scale;
+  ctx.beginPath();
+  ctx.ellipse(x, y - 1, r * 0.84, r * 0.26, 0, 0, Math.PI * 2);
+  ctx.stroke();
   ctx.strokeStyle = withAlpha('#b9a781', 0.8);
   ctx.lineWidth = 1;
   ctx.beginPath();
   ctx.ellipse(x, y - 1, r * 0.7, r * 0.22, 0, 0, Math.PI * 2);
   ctx.stroke();
-  // the food itself, a coloured bowl with little dots
-  ctx.fillStyle = recipe.cook === 'oven' ? '#c98a4f' : recipe.color;
-  ctx.beginPath();
-  ctx.ellipse(x, y - 3 * scale, r * 0.62, r * 0.24, 0, 0, Math.PI * 2);
-  ctx.fill();
-  ctx.fillStyle = withAlpha('#fff2d0', 0.8);
-  for (let i = 0; i < 5; i++) {
-    const a = i * 1.7;
-    circle(ctx, x + Math.cos(a) * r * 0.3, y - 3 * scale + Math.sin(a) * r * 0.1, 1.8 * scale, withAlpha(i % 2 ? '#f5d98b' : '#6ea84f', 0.9));
+  if (recipe.id === 'ramen') {
+    // broth, noodle nest, egg, nori and scallions: reads as ramen even at thumbnail size
+    ctx.fillStyle = '#8a4a26';
+    ctx.beginPath();
+    ctx.ellipse(x, y - 2.5 * scale, r * 0.68, r * 0.25, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = withAlpha('#b86a32', 0.85);
+    ctx.beginPath();
+    ctx.ellipse(x - r * 0.12, y - 3.2 * scale, r * 0.42, r * 0.14, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    // noodles
+    ctx.strokeStyle = '#f0d488';
+    ctx.lineWidth = 2.4 * scale;
+    for (let i = 0; i < 3; i++) {
+      ctx.beginPath();
+      ctx.moveTo(x - r * 0.5 + i * r * 0.16, y - 3 * scale);
+      ctx.bezierCurveTo(
+        x - r * 0.3 + i * r * 0.16, y - 9 * scale,
+        x - r * 0.05 + i * r * 0.16, y + 2 * scale,
+        x + r * 0.18 + i * r * 0.16, y - 4 * scale,
+      );
+      ctx.stroke();
+    }
+    // egg half
+    ctx.fillStyle = '#fbf5e6';
+    ctx.beginPath();
+    ctx.ellipse(x + r * 0.34, y - 6 * scale, r * 0.2, r * 0.16, -0.2, 0, Math.PI * 2);
+    ctx.fill();
+    circle(ctx, x + r * 0.35, y - 6 * scale, r * 0.09, '#e8902f');
+    // nori
+    ctx.save();
+    ctx.translate(x - r * 0.28, y - 8 * scale);
+    ctx.rotate(-0.16);
+    ctx.fillStyle = '#2e4a34';
+    rr(ctx, -r * 0.12, -r * 0.16, r * 0.24, r * 0.2, 1.5 * scale);
+    ctx.fill();
+    ctx.restore();
+    // scallions
+    for (let i = 0; i < 4; i++) {
+      const a = i * 1.9 + 0.4;
+      circle(ctx, x + Math.cos(a) * r * 0.3, y - 3 * scale + Math.sin(a) * r * 0.1, 1.6 * scale, '#6ea84f');
+    }
+    // chopsticks resting across the rim
+    line(ctx, x - r * 0.72, y + r * 0.2, x + r * 0.5, y - r * 0.24, '#c79a68', 1.7 * scale);
+    line(ctx, x - r * 0.7, y + r * 0.26, x + r * 0.52, y - r * 0.18, '#a97c4c', 1.4 * scale);
+  } else {
+    // the food itself, a coloured bowl with little dots
+    ctx.fillStyle = recipe.cook === 'oven' ? '#c98a4f' : recipe.color;
+    ctx.beginPath();
+    ctx.ellipse(x, y - 3 * scale, r * 0.62, r * 0.24, 0, 0, Math.PI * 2);
+    ctx.fill();
+    ctx.fillStyle = withAlpha('#fff2d0', 0.8);
+    for (let i = 0; i < 5; i++) {
+      const a = i * 1.7;
+      circle(ctx, x + Math.cos(a) * r * 0.3, y - 3 * scale + Math.sin(a) * r * 0.1, 1.8 * scale, withAlpha(i % 2 ? '#f5d98b' : '#6ea84f', 0.9));
+    }
   }
   if (sparkle) {
     ctx.save();
@@ -1895,9 +1994,8 @@ function drawCat(ctx, game) {
   ctx.restore();
 }
 
-function drawBubble(ctx, seat, def) {
+function drawBubble(ctx, seat, def, game) {
   if (!seat || seat.gone || !seat.bubble) return;
-  const x = def.x;
   const y = 540;
   const happy = seat.mood === 'happy';
   const sad = seat.mood === 'sad';
@@ -1906,6 +2004,9 @@ function drawBubble(ctx, seat, def) {
   const tw = ctx.measureText(seat.bubble).width;
   const w = Math.max(92, tw + 22);
   const h = 30;
+  // clamp to the visible world so a bubble never gets sliced by the frame edge
+  const halfView = W / (2 * game.camera.zoom);
+  const x = clamp(def.x, game.camera.x - halfView + w / 2 + 6, game.camera.x + halfView - w / 2 - 6);
   ctx.fillStyle = withAlpha('#1a1114', 0.2);
   rr(ctx, x - w / 2 + 2, y + 2, w, h, 9);
   ctx.fill();
@@ -1939,7 +2040,7 @@ function drawForeground(ctx, game) {
     const def = { x: seatXs[i], hair: '#4a2c25', sweater: '#6b3f5b', ...SEAT_DEFS[i] };
     if (seat && seat.gone) continue;
     drawCustomer(ctx, game, seat, def, i);
-    drawBubble(ctx, seat, def);
+    drawBubble(ctx, seat, def, game);
   }
 }
 

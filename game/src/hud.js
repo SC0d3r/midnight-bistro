@@ -132,6 +132,8 @@ export function drawHUD(ctx, game) {
   if (game.muted) text(ctx, 'MUTED', 1242, 54, 7, withAlpha('#d98b7a', 0.8), { weight: 700, align: 'right', spacing: 1 });
 
   if (game.shot) {
+    // staged screenshots still show the game teaching the next route step
+    if (game.hintT > 0) drawHintLine(ctx, game);
     if (game.shot === 'chop' || game.shot === 'stove') drawMeters(ctx, game);
     return;
   }
