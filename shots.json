@@ -1,0 +1,6 @@
+[
+  { "name": "1-cover", "query": "?shot=cover&seed=7" },
+  { "name": "2-chop", "query": "?shot=chop&seed=7" },
+  { "name": "3-stove", "query": "?shot=stove&seed=7" },
+  { "name": "4-serve", "query": "?shot=serve&seed=7" }
+]
