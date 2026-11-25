@@ -1238,43 +1238,48 @@ function drawOvenTop(ctx, game) {
 }
 
 function drawPassTop(ctx, game) {
-  // stacked clean plates
-  for (let i = 0; i < 5; i++) {
-    ctx.fillStyle = i % 2 ? '#f0e5cd' : '#faf2df';
-    ctx.beginPath();
-    ctx.ellipse(1024, 506 - i * 4, 25 - i * 0.6, 7, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.strokeStyle = withAlpha('#b7a580', 0.5);
-    ctx.lineWidth = 0.8;
-    ctx.stroke();
-  }
   // plated tickets sit under the heat lamps; the hero bowl fills the middle lamp when the pass is clear
   const plated = game.orders.filter((o) => o && (o.plated || o.step === 'serve'));
-  if (plated.length === 0) {
-    // the middle heat lamp pools straight down onto the plated hero dish
-    ctx.save();
-    ctx.globalCompositeOperation = 'lighter';
-    const lampCone = ctx.createLinearGradient(0, 344, 0, 516);
-    lampCone.addColorStop(0, 'rgba(255,207,130,0.30)');
-    lampCone.addColorStop(1, 'rgba(255,196,118,0.07)');
-    ctx.fillStyle = lampCone;
-    ctx.beginPath();
-    ctx.moveTo(1105, 344);
-    ctx.lineTo(1123, 344);
-    ctx.lineTo(1150, 516);
-    ctx.lineTo(1080, 516);
-    ctx.closePath();
-    ctx.fill();
-    const pool = ctx.createRadialGradient(1104, 500, 4, 1104, 500, 100);
-    pool.addColorStop(0, 'rgba(255,216,148,0.42)');
-    pool.addColorStop(0.6, 'rgba(255,198,122,0.17)');
-    pool.addColorStop(1, 'rgba(255,190,116,0)');
-    ctx.fillStyle = pool;
-    ctx.beginPath();
-    ctx.ellipse(1104, 500, 100, 40, 0, 0, Math.PI * 2);
-    ctx.fill();
-    ctx.restore();
-    drawDish(ctx, 1104, 500, recipeById('ramen'), 2.15, true);
+  // clean plates stack only when a plated order shares the pass; the hero dish stands alone otherwise
+  if (plated.length > 0) {
+    for (let i = 0; i < 5; i++) {
+      ctx.fillStyle = i % 2 ? '#f0e5cd' : '#faf2df';
+      ctx.beginPath();
+      ctx.ellipse(1024, 506 - i * 4, 25 - i * 0.6, 7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = withAlpha('#b7a580', 0.5);
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+    }
+  }
+  // the middle heat lamp always pools straight down onto the pass, whatever is on it
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  const lampCone = ctx.createLinearGradient(0, 344, 0, 516);
+  lampCone.addColorStop(0, 'rgba(255,207,130,0.30)');
+  lampCone.addColorStop(1, 'rgba(255,196,118,0.07)');
+  ctx.fillStyle = lampCone;
+  ctx.beginPath();
+  ctx.moveTo(1105, 344);
+  ctx.lineTo(1123, 344);
+  ctx.lineTo(1150, 516);
+  ctx.lineTo(1080, 516);
+  ctx.closePath();
+  ctx.fill();
+  const pool = ctx.createRadialGradient(1104, 500, 4, 1104, 500, 100);
+  pool.addColorStop(0, 'rgba(255,216,148,0.42)');
+  pool.addColorStop(0.6, 'rgba(255,198,122,0.17)');
+  pool.addColorStop(1, 'rgba(255,190,116,0)');
+  ctx.fillStyle = pool;
+  ctx.beginPath();
+  ctx.ellipse(1104, 500, 100, 40, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+  if (plated.length <= 1) {
+    // one dish waiting (or the decorative hero when the pass is clear): it fills the middle lamp
+    const hero = plated.length === 1 ? plated[0] : null;
+    const heroRecipe = hero ? hero.recipe : recipeById('ramen');
+    drawDish(ctx, 1104, 500, heroRecipe, hero ? 2.05 : 2.35, hero ? hero.quality === 'perfect' : true);
     // a bright rim keeps the plate from melting into the counter
     ctx.save();
     ctx.strokeStyle = withAlpha('#fff4d6', 0.85);
@@ -1285,12 +1290,12 @@ function drawPassTop(ctx, game) {
     ctx.restore();
     // the pass light box says what the counter already knows
     ctx.fillStyle = withAlpha('#1a1114', 0.88);
-    rr(ctx, 1104 - 52, 442, 104, 25, 5);
+    rr(ctx, 1104 - 58, 439, 116, 28, 5);
     ctx.fill();
-    ctx.strokeStyle = withAlpha('#f3bf6d', 0.65);
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = withAlpha('#f3bf6d', 0.7);
+    ctx.lineWidth = 1.3;
     ctx.stroke();
-    text(ctx, 'ORDER UP', 1104, 460, 12.5, '#ffd79a', { weight: 700, spacing: 1.7, align: 'center' });
+    text(ctx, 'ORDER UP', 1104, 460, 14.5, '#ffd79a', { weight: 700, spacing: 1.7, align: 'center' });
     // steam curls rising into the lamp light, so the pass reads as a pass
     ctx.save();
     ctx.strokeStyle = withAlpha('#ffe6bd', 0.26);
@@ -1311,12 +1316,12 @@ function drawPassTop(ctx, game) {
     });
     // the pass light box says what the counter already knows
     ctx.fillStyle = withAlpha('#1a1114', 0.86);
-    rr(ctx, 1114 - 48, 448, 96, 23, 5);
+    rr(ctx, 1114 - 54, 444, 108, 26, 5);
     ctx.fill();
-    ctx.strokeStyle = withAlpha('#f3bf6d', 0.6);
-    ctx.lineWidth = 1.2;
+    ctx.strokeStyle = withAlpha('#f3bf6d', 0.65);
+    ctx.lineWidth = 1.3;
     ctx.stroke();
-    text(ctx, 'ORDER UP', 1114, 465, 11.5, '#ffd79a', { weight: 700, spacing: 1.6, align: 'center' });
+    text(ctx, 'ORDER UP', 1114, 464, 13, '#ffd79a', { weight: 700, spacing: 1.6, align: 'center' });
   }
   // brass bell
   drawBell(ctx, 1150, 502, game);
@@ -1340,7 +1345,105 @@ function drawPassTop(ctx, game) {
   }
 }
 
+function drawRamenBowl(ctx, x, y, scale, sparkle) {
+  const r = 26 * scale;
+  // shadow
+  ctx.fillStyle = 'rgba(24,14,9,0.34)';
+  ctx.beginPath();
+  ctx.ellipse(x, y + 7 * scale, r * 1.02, r * 0.3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // bowl body: a deep ceramic bowl seen slightly from above
+  const body = ctx.createLinearGradient(x - r, y, x + r, y);
+  body.addColorStop(0, '#e6dcc4');
+  body.addColorStop(0.45, '#f8efd9');
+  body.addColorStop(1, '#d8caae');
+  ctx.fillStyle = body;
+  ctx.beginPath();
+  ctx.moveTo(x - r * 0.94, y - r * 0.06);
+  ctx.quadraticCurveTo(x - r * 0.8, y + r * 0.62, x, y + r * 0.66);
+  ctx.quadraticCurveTo(x + r * 0.8, y + r * 0.62, x + r * 0.94, y - r * 0.06);
+  ctx.closePath();
+  ctx.fill();
+  // teal band on the bowl
+  ctx.strokeStyle = withAlpha('#2f6e69', 0.85);
+  ctx.lineWidth = 2.6 * scale;
+  ctx.beginPath();
+  ctx.ellipse(x, y + r * 0.12, r * 0.82, r * 0.22, 0, 0.15, Math.PI - 0.15);
+  ctx.stroke();
+  // rim
+  ctx.fillStyle = '#fbf3df';
+  ctx.beginPath();
+  ctx.ellipse(x, y - r * 0.08, r * 0.94, r * 0.3, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.strokeStyle = withAlpha('#b9a781', 0.8);
+  ctx.lineWidth = 1.2;
+  ctx.stroke();
+  // broth
+  const broth = ctx.createRadialGradient(x - r * 0.2, y - r * 0.14, 2, x, y - r * 0.08, r * 0.8);
+  broth.addColorStop(0, '#d99a4a');
+  broth.addColorStop(0.7, '#b8722f');
+  broth.addColorStop(1, '#96521f');
+  ctx.fillStyle = broth;
+  ctx.beginPath();
+  ctx.ellipse(x, y - r * 0.06, r * 0.8, r * 0.24, 0, 0, Math.PI * 2);
+  ctx.fill();
+  // noodle swirl
+  ctx.strokeStyle = withAlpha('#f3df9d', 0.95);
+  ctx.lineWidth = 2.1 * scale;
+  for (let i = 0; i < 3; i++) {
+    ctx.beginPath();
+    ctx.moveTo(x - r * 0.52 + i * 3, y - r * 0.1);
+    ctx.bezierCurveTo(x - r * 0.2, y - r * 0.24 - i * 2, x + r * 0.1, y + r * 0.04, x + r * 0.46, y - r * 0.12 - i * 2);
+    ctx.stroke();
+  }
+  // egg half
+  ctx.fillStyle = '#fbf4e2';
+  ctx.beginPath();
+  ctx.ellipse(x - r * 0.34, y - r * 0.18, r * 0.2, r * 0.13, -0.35, 0, Math.PI * 2);
+  ctx.fill();
+  circle(ctx, x - r * 0.33, y - r * 0.18, r * 0.085, '#e39a2c');
+  circle(ctx, x - r * 0.36, y - r * 0.2, r * 0.028, withAlpha('#ffd98a', 0.9));
+  // nori
+  ctx.save();
+  ctx.translate(x + r * 0.3, y - r * 0.26);
+  ctx.rotate(0.28);
+  ctx.fillStyle = '#22392c';
+  rr(ctx, -r * 0.13, -r * 0.16, r * 0.26, r * 0.32, 1.8);
+  ctx.fill();
+  ctx.strokeStyle = withAlpha('#4a6a52', 0.8);
+  ctx.lineWidth = 0.8;
+  ctx.stroke();
+  ctx.restore();
+  // scallions
+  for (let i = 0; i < 7; i++) {
+    const a = i * 1.9;
+    circle(ctx, x + Math.cos(a) * r * 0.42, y - r * 0.08 + Math.sin(a) * r * 0.12, r * 0.045, i % 2 ? '#5f9e4d' : '#7fbc5f');
+  }
+  // chopsticks resting across the rim
+  ctx.save();
+  ctx.strokeStyle = '#c79a68';
+  ctx.lineWidth = 2.2;
+  ctx.beginPath();
+  ctx.moveTo(x - r * 0.7, y - r * 0.42);
+  ctx.lineTo(x + r * 0.55, y - r * 0.12);
+  ctx.stroke();
+  ctx.strokeStyle = withAlpha('#8a5f39', 0.9);
+  ctx.lineWidth = 1;
+  ctx.beginPath();
+  ctx.moveTo(x - r * 0.7, y - r * 0.34);
+  ctx.lineTo(x + r * 0.55, y - r * 0.04);
+  ctx.stroke();
+  ctx.restore();
+  if (sparkle) {
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    glow(ctx, x, y - 6, 40, '#ffd88a', 0.24);
+    ctx.restore();
+  }
+}
+
 function drawDish(ctx, x, y, recipe, scale = 1, sparkle = false) {
+  if (recipe && recipe.id === 'ramen') return drawRamenBowl(ctx, x, y, scale, sparkle);
   const r = 26 * scale;
   ctx.save();
   ctx.fillStyle = 'rgba(24,14,9,0.3)';
@@ -1856,6 +1959,7 @@ function drawPopups(ctx, game) {
 // ---------------------------------------------------------------- full frame
 export function drawWorld(ctx, game) {
   ctx.save();
+  clampCamera(game.camera);
   applyCamera(ctx, game);
   wallPanel(ctx);
   drawWindow(ctx, game);

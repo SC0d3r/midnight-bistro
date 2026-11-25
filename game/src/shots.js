@@ -132,15 +132,15 @@ export function stageShot(game, kind, seed = 7) {
     ticket(game, 1, 'margherita', 'chop', 0.55, { gathered: true, chops: 1 });
     moveChefTo(game.chef, 'pass', 0);
     setPose(game.chef, 'ring', 99);
-    game.camera = createCamera(1210, 480, 2.35);
+    game.camera = createCamera(1008, 430, 2.1);
     game.tips = 128;
     game.combo = 3;
     game.tipsEarned = 114;
     game.served = 3;
     game.lastTip = { amount: 18, mult: 3, t: 2.1, slot: 2 };
-    addPopup(game, '+$18 x3', 966, 512, '#ffd79a');
-    emitHearts(game, 966, 582, 7);
-    emitCoins(game, 966, 596, 1004, 54, 4);
+    addPopup(game, '+$18 x3', 1104, 470, '#ffd79a');
+    emitHearts(game, 1104, 566, 7);
+    emitCoins(game, 1104, 596, 1104, 54, 4);
     emitSteam(game, 1058, 452, 8, 14, { a: 0.16 });
     game.hintText = 'ORDER UP  ·  ring the bell to send the ramen';
     game.hintT = 99;
@@ -161,7 +161,7 @@ export function stageShot(game, kind, seed = 7) {
       game.chop.pos = 0.47;
       o0.chops = 2;
     }
-    game.camera = createCamera(640, 400, 1);
+    game.camera = createCamera(700, 420, 1.35);
     game.tips = 128;
     game.combo = 3;
     game.shiftTime = 96;
@@ -184,7 +184,8 @@ export function stageShot(game, kind, seed = 7) {
     game.chop = kind === 'cover' ? game.chop : null;
   }
   if (kind !== 'stove') game.cook = null;
-  game.hintT = 0;
+  // the staging hint is part of the shot: the screenshots show the game teaching a route
+  if (kind !== 'cover' && kind !== 'serve') game.hintT = 0;
   return game;
 }
 
