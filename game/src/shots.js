@@ -152,7 +152,7 @@ export function stageShot(game, kind, seed = 7) {
     ticket(game, 1, 'ramen', 'cook', 0.54, { gathered: true, chops: 3 });
     ticket(game, 2, 'salmon', 'gather', 0.88);
     moveChefTo(game.chef, 'prep', 2);
-    setPose(game.chef, 'chop', 99);
+    setPose(game.chef, 'garnish', 99);
     startChop(game, 0);
     if (game.chop) {
       game.chop.chops = 2;
@@ -162,6 +162,7 @@ export function stageShot(game, kind, seed = 7) {
     game.camera = createCamera(640, 400, 1);
     game.tips = 128;
     game.combo = 3;
+    game.shiftTime = 96;
     game.clockMinutes = 167;
     game.flash = 0.12;
     emitSteam(game, 674, 400, 14, 12, { a: 0.2 });

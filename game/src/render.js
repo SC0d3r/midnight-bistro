@@ -1088,6 +1088,40 @@ function drawToppingBowl(ctx, x, y, ingredient) {
   if (ingredient === 'basil') drawIngredient(ctx, ingredient, x + 7, y - 5, 5);
 }
 
+function drawCounterProps(ctx, game) {
+  // a folded service towel and a bowl of tomatoes keep the long counter from reading as dead space
+  ctx.save();
+  ctx.fillStyle = 'rgba(24,13,9,0.25)';
+  ctx.beginPath();
+  ctx.ellipse(762, 517, 38, 7, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#ded2b8';
+  rr(ctx, 738, 498, 48, 20, 4);
+  ctx.fill();
+  ctx.fillStyle = '#c6b99c';
+  rr(ctx, 738, 511, 48, 7, 3);
+  ctx.fill();
+  line(ctx, 744, 504, 780, 504, withAlpha('#8f856d', 0.5), 1.2);
+  line(ctx, 744, 508, 780, 508, withAlpha('#8f856d', 0.35), 1);
+
+  ctx.fillStyle = 'rgba(30,16,10,0.28)';
+  ctx.beginPath();
+  ctx.ellipse(944, 530, 23, 6, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#d9cbb0';
+  ctx.beginPath();
+  ctx.ellipse(944, 522, 23, 10, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.fillStyle = '#b9a98c';
+  ctx.beginPath();
+  ctx.arc(944, 520, 23, 0, Math.PI);
+  ctx.fill();
+  drawIngredient(ctx, 'tomato', 938, 514, 7);
+  drawIngredient(ctx, 'tomato', 950, 512, 6);
+  drawIngredient(ctx, 'basil', 945, 507, 5);
+  ctx.restore();
+}
+
 function drawStoveTop(ctx, game) {
   const t = game.time;
   // burner grates
@@ -1212,7 +1246,24 @@ function drawPassTop(ctx, game) {
   // plated tickets sit under the heat lamps; the hero bowl fills the middle lamp when the pass is clear
   const plated = game.orders.filter((o) => o && (o.plated || o.step === 'serve'));
   if (plated.length === 0) {
-    drawDish(ctx, 1100, 496, recipeById('ramen'), 1.22, true);
+    ctx.save();
+    ctx.globalCompositeOperation = 'lighter';
+    glow(ctx, 1114, 468, 72, '#ffcf82', 0.16);
+    ctx.restore();
+    drawDish(ctx, 1104, 498, recipeById('ramen'), 1.32, true);
+    // steam curls rising into the lamp light, so the pass reads as a pass
+    ctx.save();
+    ctx.strokeStyle = withAlpha('#ffe6bd', 0.26);
+    ctx.lineWidth = 2;
+    for (let i = 0; i < 3; i++) {
+      const sx = 1086 + i * 16;
+      const t = game.time * 0.9 + i * 1.7;
+      ctx.beginPath();
+      ctx.moveTo(sx, 488);
+      ctx.bezierCurveTo(sx - 5, 476, sx + 5 + Math.sin(t) * 2, 464, sx - 2, 451);
+      ctx.stroke();
+    }
+    ctx.restore();
   } else {
     const first = 1114 - ((plated.length - 1) * 58) / 2;
     plated.forEach((o, i) => {
@@ -1770,6 +1821,7 @@ export function drawWorld(ctx, game) {
   drawPassBack(ctx, game);
   drawDeck(ctx, game);
   drawPrepTop(ctx, game);
+  drawCounterProps(ctx, game);
   drawStoveTop(ctx, game);
   drawOvenTop(ctx, game);
   drawPassTop(ctx, game);

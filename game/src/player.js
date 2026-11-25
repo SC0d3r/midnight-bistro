@@ -253,6 +253,17 @@ export function drawChef(ctx, game) {
       { x: -34, y: -25 },
       { x: 8, y: -28 },
     ];
+  } else if (pose === 'garnish') {
+    // one hand steadies the board, the other pinches basil over the pizza
+    const bob = Math.sin(c.poseT * 2.6) * 1.6;
+    hands = [
+      { x: -36, y: 2 },
+      { x: 6, y: 6 + bob },
+    ];
+    elbows = [
+      { x: -38, y: -26 },
+      { x: 20, y: -24 },
+    ];
   } else if (pose === 'stir') {
     hands = [
       { x: -46, y: 2 },
@@ -314,6 +325,24 @@ export function drawChef(ctx, game) {
   // props in hand
   if (pose === 'chop') {
     drawKnife(ctx, hands[1].x + 2, hands[1].y + 2, -0.55, 1.4);
+  } else if (pose === 'garnish') {
+    // a pinch of basil leaves falling from the fingers onto the pizza
+    const hx = hands[1].x;
+    const hy = hands[1].y;
+    for (let i = 0; i < 3; i++) {
+      const fx = hx - 3 + i * 6 + Math.sin(game.time * 2 + i) * 1.2;
+      const fy = hy + 12 + i * 7;
+      ctx.save();
+      ctx.translate(fx, fy);
+      ctx.rotate(0.5 - i * 0.45);
+      ctx.fillStyle = i % 2 ? '#6ea84f' : '#84bb5c';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 3.4, 1.7, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.restore();
+    }
+    circle(ctx, hx - 1.5, hy + 1, 1.4, '#84bb5c');
+    circle(ctx, hx + 2, hy + 2.5, 1.2, '#6ea84f');
   } else if (pose === 'stir') {
     drawSpatula(ctx, hands[0].x, hands[0].y - 2, -2.32 + Math.sin(game.time * 6) * 0.05);
   } else if (pose === 'bake') {

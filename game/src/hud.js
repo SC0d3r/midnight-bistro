@@ -50,7 +50,7 @@ function drawClock(ctx, game, x, y) {
   line(ctx, x, y - 5, x + 3, y - 5, '#f3bf6d', 1.2);
   const mins = game.clockMinutes === undefined ? 167 : game.clockMinutes;
   text(ctx, fmtClock(mins), x + 13, y + 3, 24, '#f6e3b9', { font: 'mono', weight: 700 });
-  text(ctx, 'LAST ORDERS 03:00', x + 14, y + 16, 7, withAlpha('#d9c5a3', 0.55), { spacing: 1 });
+  text(ctx, 'LAST ORDERS 03:00', x + 14, y + 17, 7.2, withAlpha('#f0dcb4', 0.95), { spacing: 1 });
 }
 
 export function drawHUD(ctx, game) {
@@ -109,7 +109,7 @@ export function drawHUD(ctx, game) {
   ctx.restore();
   // shift progress
   const pct = clamp(game.shiftTime / SHIFT_SECONDS, 0, 1);
-  text(ctx, 'SHIFT', 1160, 23, 7, withAlpha('#cdbd9f', 0.65), { weight: 700, spacing: 1.4 });
+  text(ctx, 'SHIFT', 1160, 23, 7.4, withAlpha('#e8d4ab', 0.92), { weight: 700, spacing: 1.4 });
   const rush = game.shiftTime >= SHIFT_SECONDS - 30;
   if (rush) {
     ctx.fillStyle = withAlpha('#b3453b', 0.9);
@@ -117,9 +117,9 @@ export function drawHUD(ctx, game) {
     ctx.fill();
     text(ctx, 'RUSH', 1219, 25, 8, '#ffe0b0', { weight: 700, spacing: 2, align: 'center' });
   } else {
-    text(ctx, Math.ceil(SHIFT_SECONDS - game.shiftTime) + 's', 1242, 23, 7, withAlpha('#cdbd9f', 0.55), { align: 'right' });
+    text(ctx, Math.ceil(SHIFT_SECONDS - game.shiftTime) + 's', 1242, 23, 7.6, withAlpha('#e8d4ab', 0.88), { align: 'right' });
   }
-  ctx.fillStyle = withAlpha('#000000', 0.4);
+  ctx.fillStyle = withAlpha('#000000', 0.55);
   rr(ctx, 1160, 32, 82, 7, 3);
   ctx.fill();
   const sg = ctx.createLinearGradient(1160, 0, 1242, 0);
@@ -128,7 +128,7 @@ export function drawHUD(ctx, game) {
   ctx.fillStyle = sg;
   rr(ctx, 1160, 32, Math.max(3, 82 * pct), 7, 3);
   ctx.fill();
-  text(ctx, (game.tipsEarned || 0) > 0 ? `+$${game.tipsEarned} tonight` : 'a quiet night so far', 1160, 54, 7.4, withAlpha('#cdbd9f', 0.55), {});
+  text(ctx, (game.tipsEarned || 0) > 0 ? `+$${game.tipsEarned} tonight` : 'a quiet night so far', 1160, 54, 7.8, withAlpha('#e8d4ab', 0.85), {});
   if (game.muted) text(ctx, 'MUTED', 1242, 54, 7, withAlpha('#d98b7a', 0.8), { weight: 700, align: 'right', spacing: 1 });
 
   if (game.shot) {
