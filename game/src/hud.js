@@ -49,8 +49,8 @@ function drawClock(ctx, game, x, y) {
   line(ctx, x, y - 5, x, y - 9, '#f3bf6d', 1.2);
   line(ctx, x, y - 5, x + 3, y - 5, '#f3bf6d', 1.2);
   const mins = game.clockMinutes === undefined ? 167 : game.clockMinutes;
-  text(ctx, fmtClock(mins), x + 13, y + 3, 24, '#f6e3b9', { font: 'mono', weight: 700 });
-  text(ctx, 'LAST ORDERS 03:00', x + 14, y + 17, 7.2, withAlpha('#f0dcb4', 0.95), { spacing: 1 });
+  text(ctx, fmtClock(mins), x + 13, y + 4, 30, '#f6e3b9', { font: 'mono', weight: 700 });
+  text(ctx, 'LAST ORDERS 03:00', x + 108, y + 2, 8.2, withAlpha('#f0dcb4', 0.95), { spacing: 1 });
 }
 
 export function drawHUD(ctx, game) {
@@ -203,21 +203,21 @@ function drawTicket(ctx, game, index, x, y, w, h) {
   text(ctx, '#' + String(index + 1).padStart(2, '0'), x + 8, y + 16, 7, withAlpha('#7a5a3a', 0.8), { font: 'mono', weight: 700 });
   text(ctx, seat ? seat.customer.name : 'Guest', x + w - 8, y + 16, 7, withAlpha('#7a5a3a', 0.75), { align: 'right', weight: 700, spacing: 0.8 });
   // dish name
-  text(ctx, r.short, x + 8, y + 31, 11.4, '#33231a', { font: 'serif', weight: 700 });
+  text(ctx, r.short, x + 8, y + 30, 14, '#33231a', { font: 'serif', weight: 700 });
   // ingredient icons and step
   r.ingredients.forEach((id, k) => {
     const got = order.gathered.includes(id);
-    drawIngredient(ctx, id, x + 14 + k * 18, y + 45, 6.2);
+    drawIngredient(ctx, id, x + 11 + k * 14, y + 44, 6.2);
     if (got) {
-      circle(ctx, x + 14 + k * 18, y + 45, 8.4, withAlpha('#2f6e69', 0.16));
+      circle(ctx, x + 11 + k * 14, y + 44, 7.4, withAlpha('#2f6e69', 0.16));
     }
   });
   const verb = stepVerb(order);
   const done = order.step === 'serve';
-  ctx.fillStyle = done ? withAlpha('#2f6e69', 0.9) : withAlpha(r.color, 0.16);
-  rr(ctx, x + 68, y + 38, w - 76, 14, 3);
+  ctx.fillStyle = done ? withAlpha('#2f6e69', 0.95) : withAlpha(r.color, 0.92);
+  rr(ctx, x + 66, y + 34, w - 74, 17, 3);
   ctx.fill();
-  text(ctx, done ? 'SERVE ' + (index + 1) : verb, x + w - 14, y + 48, 7, done ? '#e8f3e7' : '#4a3324', { weight: 700, spacing: 0.7, align: 'right' });
+  text(ctx, done ? 'SERVE ' + (index + 1) : verb, x + w - 12, y + 47, 9.2, done ? '#e8f3e7' : '#241610', { weight: 700, spacing: 0.6, align: 'right' });
   // patience
   const pc = patienceColor(order.patience);
   ctx.fillStyle = withAlpha('#3b2b1c', 0.18);
@@ -247,15 +247,15 @@ function drawHintLine(ctx, game) {
   const tone = game.hintTone === 'good' ? '#bfe4d8' : game.hintTone === 'bad' ? '#ffc5ad' : '#f0e3c7';
   ctx.save();
   ctx.globalAlpha = a;
-  ctx.font = `400 12px ${FONT.ui}`;
-  const w = Math.min(760, ctx.measureText(game.hintText).width + 36);
-  ctx.fillStyle = withAlpha('#120d15', 0.72);
-  rr(ctx, 640 - w / 2, 102, w, 25, 8);
+  ctx.font = `400 15px ${FONT.ui}`;
+  const w = Math.min(900, ctx.measureText(game.hintText).width + 44);
+  ctx.fillStyle = withAlpha('#120d15', 0.8);
+  rr(ctx, 640 - w / 2, 100, w, 31, 9);
   ctx.fill();
   ctx.strokeStyle = withAlpha(tone, 0.22);
   ctx.lineWidth = 1;
   ctx.stroke();
-  text(ctx, game.hintText, 640, 119, 12, tone, { align: 'center' });
+  text(ctx, game.hintText, 640, 120, 15, tone, { align: 'center' });
   ctx.restore();
 }
 

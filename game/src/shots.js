@@ -95,7 +95,7 @@ export function stageShot(game, kind, seed = 7) {
       game.chop.speed = 1.0;
       o0.chops = 2;
     }
-    game.camera = createCamera(390, 416, 1.74);
+    game.camera = createCamera(390, 430, 2.35);
     game.tips = 128;
     game.combo = 3;
     game.clockMinutes = 167;
@@ -119,7 +119,7 @@ export function stageShot(game, kind, seed = 7) {
       game.cook.speed = 0.11;
       o0.quality = null;
     }
-    game.camera = createCamera(628, 414, 1.72);
+    game.camera = createCamera(636, 420, 2.25);
     emitSteam(game, 674, 402, 12, 12, { a: 0.2 });
     emitSteam(game, 578, 424, 6, 16, { a: 0.12 });
     emitSpark(game, 566, 440, 8);
@@ -128,11 +128,11 @@ export function stageShot(game, kind, seed = 7) {
     seat(game, 0, seat0, 'Extra basil, please');
     seat(game, 1, seat1, 'I am starving');
     seat(game, 2, seat2, 'Mmm. Perfect.', 'happy');
-    ticket(game, 0, 'ramen', 'cook', 0.72, { gathered: true, chops: 3 });
+    ticket(game, 0, 'ramen', 'serve', 0.72, { gathered: true, chops: 3 });
     ticket(game, 1, 'margherita', 'chop', 0.55, { gathered: true, chops: 1 });
     moveChefTo(game.chef, 'pass', 0);
     setPose(game.chef, 'ring', 99);
-    game.camera = createCamera(750, 440, 1.22);
+    game.camera = createCamera(1280, 470, 2.1);
     game.tips = 128;
     game.combo = 3;
     game.tipsEarned = 114;
@@ -142,6 +142,8 @@ export function stageShot(game, kind, seed = 7) {
     emitHearts(game, 966, 582, 7);
     emitCoins(game, 966, 596, 1004, 54, 4);
     emitSteam(game, 1058, 452, 8, 14, { a: 0.16 });
+    game.hintText = 'ORDER UP  ·  ring the bell to send the ramen';
+    game.hintT = 99;
     linger(game, 'steam');
   } else {
     // cover: the busiest, warmest frame
@@ -165,6 +167,8 @@ export function stageShot(game, kind, seed = 7) {
     game.shiftTime = 96;
     game.clockMinutes = 167;
     game.flash = 0.12;
+    game.hintText = 'ORDER #01  ·  finish the basil, then cook the Margherita';
+    game.hintT = 99;
     emitSteam(game, 674, 400, 14, 12, { a: 0.2 });
     emitSteam(game, 1058, 448, 6, 12, { a: 0.14 });
     emitSpark(game, 566, 440, 7);

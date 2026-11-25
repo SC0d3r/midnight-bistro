@@ -1255,8 +1255,8 @@ function drawPassTop(ctx, game) {
     ctx.save();
     ctx.globalCompositeOperation = 'lighter';
     const lampCone = ctx.createLinearGradient(0, 344, 0, 516);
-    lampCone.addColorStop(0, 'rgba(255,207,130,0.22)');
-    lampCone.addColorStop(1, 'rgba(255,196,118,0.05)');
+    lampCone.addColorStop(0, 'rgba(255,207,130,0.30)');
+    lampCone.addColorStop(1, 'rgba(255,196,118,0.07)');
     ctx.fillStyle = lampCone;
     ctx.beginPath();
     ctx.moveTo(1105, 344);
@@ -1265,22 +1265,22 @@ function drawPassTop(ctx, game) {
     ctx.lineTo(1080, 516);
     ctx.closePath();
     ctx.fill();
-    const pool = ctx.createRadialGradient(1104, 500, 4, 1104, 500, 86);
-    pool.addColorStop(0, 'rgba(255,216,148,0.34)');
-    pool.addColorStop(0.6, 'rgba(255,198,122,0.13)');
+    const pool = ctx.createRadialGradient(1104, 500, 4, 1104, 500, 100);
+    pool.addColorStop(0, 'rgba(255,216,148,0.42)');
+    pool.addColorStop(0.6, 'rgba(255,198,122,0.17)');
     pool.addColorStop(1, 'rgba(255,190,116,0)');
     ctx.fillStyle = pool;
     ctx.beginPath();
-    ctx.ellipse(1104, 500, 92, 36, 0, 0, Math.PI * 2);
+    ctx.ellipse(1104, 500, 100, 40, 0, 0, Math.PI * 2);
     ctx.fill();
     ctx.restore();
-    drawDish(ctx, 1104, 500, recipeById('ramen'), 1.5, true);
+    drawDish(ctx, 1104, 500, recipeById('ramen'), 1.85, true);
     // a bright rim keeps the plate from melting into the counter
     ctx.save();
-    ctx.strokeStyle = withAlpha('#fff4d6', 0.8);
-    ctx.lineWidth = 1.7;
+    ctx.strokeStyle = withAlpha('#fff4d6', 0.85);
+    ctx.lineWidth = 2;
     ctx.beginPath();
-    ctx.ellipse(1104, 499, 39, 12.6, 0, Math.PI * 1.03, Math.PI * 1.97);
+    ctx.ellipse(1104, 498, 47, 15.2, 0, Math.PI * 1.03, Math.PI * 1.97);
     ctx.stroke();
     ctx.restore();
     // steam curls rising into the lamp light, so the pass reads as a pass
@@ -1297,10 +1297,18 @@ function drawPassTop(ctx, game) {
     }
     ctx.restore();
   } else {
-    const first = 1114 - ((plated.length - 1) * 58) / 2;
+    const first = 1114 - ((plated.length - 1) * 64) / 2;
     plated.forEach((o, i) => {
-      drawDish(ctx, first + i * 58, 530, o.recipe, 0.68, o.quality === 'perfect');
+      drawDish(ctx, first + i * 64, 528, o.recipe, 0.92, o.quality === 'perfect');
     });
+    // the pass light box says what the counter already knows
+    ctx.fillStyle = withAlpha('#1a1114', 0.86);
+    rr(ctx, 1114 - 48, 448, 96, 23, 5);
+    ctx.fill();
+    ctx.strokeStyle = withAlpha('#f3bf6d', 0.6);
+    ctx.lineWidth = 1.2;
+    ctx.stroke();
+    text(ctx, 'ORDER UP', 1114, 465, 11.5, '#ffd79a', { weight: 700, spacing: 1.6, align: 'center' });
   }
   // brass bell
   drawBell(ctx, 1150, 502, game);
