@@ -152,8 +152,8 @@ export function stageShot(game, kind, seed = 7) {
     ticket(game, 1, 'ramen', 'cook', 0.54, { gathered: true, chops: 3 });
     ticket(game, 2, 'salmon', 'gather', 0.88);
     moveChefTo(game.chef, 'prep', 2);
-    setPose(game.chef, 'garnish', 99);
     startChop(game, 0);
+    setPose(game.chef, 'garnish', 99);
     if (game.chop) {
       game.chop.chops = 2;
       game.chop.pos = 0.47;

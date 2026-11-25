@@ -941,6 +941,11 @@ function drawPrepTop(ctx, game) {
   const by = 468;
   const bw = 166;
   const bh = 52;
+  // a warm pool of light from the prep lamp, so the hero board carries the eye
+  ctx.save();
+  ctx.globalCompositeOperation = 'lighter';
+  glow(ctx, 396, 468, 132, '#ffcf82', 0.11);
+  ctx.restore();
   // shadow
   ctx.fillStyle = 'rgba(24,13,9,0.32)';
   ctx.beginPath();
@@ -991,7 +996,7 @@ function drawPrepTop(ctx, game) {
   // the pizza, mid-assembly
   const px = 394;
   const py = 492;
-  drawPizza(ctx, px, py, 36, game);
+  drawPizza(ctx, px, py, 42, game);
   // bowls of toppings
   drawToppingBowl(ctx, 492, 476, 'tomato');
   drawToppingBowl(ctx, 492, 500, 'basil');
