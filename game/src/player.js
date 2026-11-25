@@ -326,23 +326,49 @@ export function drawChef(ctx, game) {
   if (pose === 'chop') {
     drawKnife(ctx, hands[1].x + 2, hands[1].y + 2, -0.55, 1.4);
   } else if (pose === 'garnish') {
-    // a pinch of basil leaves falling from the fingers onto the pizza
+    // a whole basil sprig held between the fingers, leaves dropping to the pizza
     const hx = hands[1].x;
     const hy = hands[1].y;
-    for (let i = 0; i < 3; i++) {
-      const fx = hx - 3 + i * 6 + Math.sin(game.time * 2 + i) * 1.2;
-      const fy = hy + 12 + i * 7;
+    ctx.save();
+    ctx.translate(hx, hy);
+    ctx.strokeStyle = '#4a7534';
+    ctx.lineWidth = 1.7;
+    ctx.beginPath();
+    ctx.moveTo(-1, -1);
+    ctx.lineTo(2, 9);
+    ctx.stroke();
+    const sprig = [
+      [-4.2, 1.4, -0.55, 1.0],
+      [5.0, 2.4, 0.7, 1.05],
+      [0.4, 7.6, 0.05, 0.9],
+    ];
+    for (const [dx, dy, rot, s] of sprig) {
+      ctx.save();
+      ctx.translate(dx, dy);
+      ctx.rotate(rot);
+      ctx.fillStyle = '#7dbf57';
+      ctx.beginPath();
+      ctx.ellipse(0, 0, 5.4 * s, 2.7 * s, 0, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.strokeStyle = '#3f6b2d';
+      ctx.lineWidth = 0.8;
+      ctx.stroke();
+      ctx.restore();
+    }
+    ctx.restore();
+    // the loose leaves dropping toward the pizza
+    for (let i = 0; i < 4; i++) {
+      const fx = hx + 1 + i * 4.4 + Math.sin(game.time * 2 + i) * 1.5;
+      const fy = hy + 16 + i * 6;
       ctx.save();
       ctx.translate(fx, fy);
-      ctx.rotate(0.5 - i * 0.45);
+      ctx.rotate(0.55 - i * 0.42);
       ctx.fillStyle = i % 2 ? '#6ea84f' : '#84bb5c';
       ctx.beginPath();
-      ctx.ellipse(0, 0, 3.4, 1.7, 0, 0, Math.PI * 2);
+      ctx.ellipse(0, 0, 4.1, 1.9, 0, 0, Math.PI * 2);
       ctx.fill();
       ctx.restore();
     }
-    circle(ctx, hx - 1.5, hy + 1, 1.4, '#84bb5c');
-    circle(ctx, hx + 2, hy + 2.5, 1.2, '#6ea84f');
   } else if (pose === 'stir') {
     drawSpatula(ctx, hands[0].x, hands[0].y - 2, -2.32 + Math.sin(game.time * 6) * 0.05);
   } else if (pose === 'bake') {
