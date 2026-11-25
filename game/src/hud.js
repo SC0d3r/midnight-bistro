@@ -147,14 +147,25 @@ function drawTicket(ctx, game, index, x, y, w, h) {
   const seat = game.seats[index];
   ctx.save();
   if (!order) {
-    ctx.strokeStyle = withAlpha('#8f795c', 0.35);
+    ctx.fillStyle = withAlpha('#efdfbd', 0.1);
+    rr(ctx, x, y, w, h, 5);
+    ctx.fill();
+    ctx.strokeStyle = withAlpha('#8f795c', 0.55);
     ctx.setLineDash([4, 4]);
     ctx.lineWidth = 1.2;
     rr(ctx, x, y, w, h, 5);
     ctx.stroke();
     ctx.setLineDash([]);
-    text(ctx, 'NO TICKET', x + w / 2, y + h / 2 + 3, 8, withAlpha('#cdbd9f', 0.32), { align: 'center', spacing: 2, weight: 700 });
-    circle(ctx, x + w / 2, y - 2, 3, withAlpha('#8f795c', 0.35));
+    ctx.fillStyle = withAlpha('#8d734f', 0.65);
+    rr(ctx, x + w / 2 - 7, y - 5, 14, 8, 3);
+    ctx.fill();
+    circle(ctx, x + w / 2, y - 1, 2.2, withAlpha('#3b2b1c', 0.7));
+    ctx.strokeStyle = withAlpha('#a98d63', 0.55);
+    ctx.lineWidth = 1.2;
+    circle(ctx, x + w / 2, y + 27, 8, withAlpha('#efdfbd', 0.08));
+    ctx.stroke();
+    circle(ctx, x + w / 2, y + 27, 3, withAlpha('#efdfbd', 0.08));
+    text(ctx, 'SEAT OPEN', x + w / 2, y + 50, 7, withAlpha('#cdbd9f', 0.6), { align: 'center', spacing: 1.6, weight: 700 });
     ctx.restore();
     return;
   }
@@ -206,7 +217,7 @@ function drawTicket(ctx, game, index, x, y, w, h) {
   ctx.fillStyle = done ? withAlpha('#2f6e69', 0.9) : withAlpha(r.color, 0.16);
   rr(ctx, x + 68, y + 38, w - 76, 14, 3);
   ctx.fill();
-  text(ctx, done ? 'SERVE ' + (index + 1) : verb, x + w - 12, y + 48, 7.4, done ? '#e8f3e7' : '#4a3324', { weight: 700, spacing: 1, align: 'right' });
+  text(ctx, done ? 'SERVE ' + (index + 1) : verb, x + w - 14, y + 48, 7, done ? '#e8f3e7' : '#4a3324', { weight: 700, spacing: 0.7, align: 'right' });
   // patience
   const pc = patienceColor(order.patience);
   ctx.fillStyle = withAlpha('#3b2b1c', 0.18);

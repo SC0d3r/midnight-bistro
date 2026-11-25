@@ -272,14 +272,14 @@ export function drawChef(ctx, game) {
       { x: 31, y: -28 },
     ];
   } else if (pose === 'ring') {
-    const wob = Math.sin(c.poseT * 22) * 2.2;
+    const wob = Math.sin(c.poseT * 22) * 1.4;
     hands = [
       { x: -20, y: -2 },
-      { x: 50, y: 44 + wob },
+      { x: 48 + wob, y: 28 },
     ];
     elbows = [
       { x: -28, y: -30 },
-      { x: 38, y: -2 },
+      { x: 40, y: -4 },
     ];
   } else if (pose === 'plate') {
     hands = [
@@ -319,11 +319,15 @@ export function drawChef(ctx, game) {
   } else if (pose === 'bake') {
     drawPeel(ctx, hands[1].x - 6, hands[1].y + 4, -0.2);
   } else if (pose === 'ring') {
-    ctx.strokeStyle = withAlpha('#fff2c8', 0.85);
-    ctx.lineWidth = 1.6;
-    for (let i = 0; i < 2; i++) {
+    const hx = hands[1].x;
+    const hy = hands[1].y;
+    ctx.strokeStyle = withAlpha('#fff2c8', 0.9);
+    ctx.lineWidth = 1.5;
+    for (let i = 0; i < 3; i++) {
+      const a = -2.5 + i * 0.55 + Math.sin(game.time * 16) * 0.05;
       ctx.beginPath();
-      ctx.arc(hands[1].x + 8, hands[1].y - 10, 7 + i * 5 + Math.sin(game.time * 14) * 1.5, -1.2, 0.5);
+      ctx.moveTo(hx + Math.cos(a) * 9, hy - 4 + Math.sin(a) * 9);
+      ctx.lineTo(hx + Math.cos(a) * (16 + i * 2), hy - 4 + Math.sin(a) * (16 + i * 2));
       ctx.stroke();
     }
   } else if (pose === 'plate') {

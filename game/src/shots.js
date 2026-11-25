@@ -138,7 +138,7 @@ export function stageShot(game, kind, seed = 7) {
     game.tipsEarned = 114;
     game.served = 3;
     game.lastTip = { amount: 18, mult: 3, t: 2.1, slot: 2 };
-    addPopup(game, '+$18 x3', 966, 560, '#ffd79a');
+    addPopup(game, '+$18 x3', 966, 512, '#ffd79a');
     emitHearts(game, 966, 582, 7);
     emitCoins(game, 966, 596, 1004, 54, 4);
     emitSteam(game, 1058, 452, 8, 14, { a: 0.16 });

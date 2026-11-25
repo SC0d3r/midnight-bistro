@@ -1209,36 +1209,35 @@ function drawPassTop(ctx, game) {
     ctx.lineWidth = 0.8;
     ctx.stroke();
   }
-  // finished ramen bowl under the lamps
-  drawDish(ctx, 1058, 500, recipeById('ramen'), 1, false);
+  // plated tickets sit under the heat lamps; the hero bowl fills the middle lamp when the pass is clear
+  const plated = game.orders.filter((o) => o && (o.plated || o.step === 'serve'));
+  if (plated.length === 0) {
+    drawDish(ctx, 1100, 496, recipeById('ramen'), 1.22, true);
+  } else {
+    const first = 1114 - ((plated.length - 1) * 58) / 2;
+    plated.forEach((o, i) => {
+      drawDish(ctx, first + i * 58, 530, o.recipe, 0.68, o.quality === 'perfect');
+    });
+  }
   // brass bell
-  drawBell(ctx, 1148, 502, game);
+  drawBell(ctx, 1150, 502, game);
   // clean plate at the end
   ctx.fillStyle = '#f7efdb';
   ctx.beginPath();
-  ctx.ellipse(1200, 504, 27, 8, 0, 0, Math.PI * 2);
+  ctx.ellipse(1208, 504, 20, 6.5, 0, 0, Math.PI * 2);
   ctx.fill();
   ctx.strokeStyle = withAlpha('#c8b795', 0.9);
   ctx.lineWidth = 1.2;
   ctx.beginPath();
-  ctx.ellipse(1200, 503, 19, 5, 0, 0, Math.PI * 2);
+  ctx.ellipse(1208, 503, 14, 4, 0, 0, Math.PI * 2);
   ctx.stroke();
-  // plated tickets sit on the pass
-  let shown = 0;
-  game.orders.forEach((o) => {
-    if (o && (o.plated || o.step === 'serve')) {
-      const dx = 1088 + shown * 40;
-      drawDish(ctx, dx, 528, o.recipe, 0.62, o.quality === 'perfect');
-      shown++;
-    }
-  });
-  if (game.orders.every((o) => !o || (!o.plated && o.step !== 'serve'))) {
+  if (plated.length === 0) {
     // a small herb garnish bowl so the pass never feels empty
     ctx.fillStyle = '#cbbfa4';
     ctx.beginPath();
-    ctx.ellipse(1104, 532, 16, 5.5, 0, 0, Math.PI * 2);
+    ctx.ellipse(1032, 532, 15, 5.5, 0, 0, Math.PI * 2);
     ctx.fill();
-    drawIngredient(ctx, 'basil', 1104, 526, 8);
+    drawIngredient(ctx, 'basil', 1032, 526, 8);
   }
 }
 
